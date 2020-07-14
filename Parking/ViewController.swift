@@ -7,14 +7,33 @@
 //
 
 import UIKit
+import WebKit
 
-class ViewController: UIViewController {
+class ViewController: UITableViewController, WKNavigationDelegate {
+    var webView: WKWebView!
+    
+    override func loadView() {
+        webView = WKWebView()
+        webView.navigationDelegate = self
+        view = webView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        // 1
+        let url = URL(string: "https://drive.google.com/open?id=1rUHKlVMA7_Bc1Ab3v_rLvaPbsxAQuZvE&usp=sharing")!
+        webView.load(URLRequest(url: url))
+        
+        // 2
+        let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
+        toolbarItems = [refresh]
+        navigationController?.isToolbarHidden = false
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        title = webView.title
     }
 
 
 }
-
